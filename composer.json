@@ -1,0 +1,47 @@
+{
+    "name": "wgy-hyve/keycloak-laravel-guard",
+    "description": "Keycloak Guard for Laravel",
+    "keywords": [
+        "laravel",
+        "keycloak"
+    ],
+    "homepage": "https://github.com/wg-hyve/keycloak-laravel-guard",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Sinema"
+        }
+    ],
+    "minimum-stability": "stable",
+    "prefer-stable": true,
+    "require": {
+        "php": "^8.1",
+        "firebase/php-jwt": "^6.8",
+        "sinema/json-api-error-laravel": "^0.3.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "KeycloakGuard\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "KeycloakGuard\\Tests\\": "tests/"
+        }
+    },
+    "scripts": {
+        "test": "vendor/bin/phpunit --testdox",
+        "test-coverage": "phpunit --coverage-html coverage"
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "KeycloakGuard\\KeycloakGuardServiceProvider"
+            ]
+        }
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^10.0",
+        "laravel/framework": "^10.10"
+    }
+}
