@@ -52,7 +52,7 @@ class KeycloakGuard implements Guard
         }
 
         if ($this->decodedToken) {
-            $this->validate([$this->config['user_provider_credential'] => $this->getClientName()]);
+            $this->validate();
         }
     }
 

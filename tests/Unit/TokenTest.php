@@ -4,11 +4,14 @@ namespace Tests\Unit;
 
 use KeycloakGuard\Exceptions\TokenException;
 use KeycloakGuard\Tests\TestCase;
+use KeycloakGuard\Tests\Traits\HasPayload;
 use KeycloakGuard\Token;
 use stdClass;
 
 class TokenTest extends TestCase
 {
+    use HasPayload;
+
     /**
      * @throws TokenException
      */
