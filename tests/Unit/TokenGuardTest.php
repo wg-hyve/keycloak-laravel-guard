@@ -157,6 +157,17 @@ class TokenGuardTest extends TestCase
      * @throws ResourceAccessNotAllowedException
      * @throws InvalidTokenException
      */
+    public function test_guard_bearer_token_has_no_scopes(): void
+    {
+        $guard = $this->getGuard('access_token_no_scopes');
+
+        $this->assertEquals([], $guard->scopes());
+    }
+
+    /**
+     * @throws ResourceAccessNotAllowedException
+     * @throws InvalidTokenException
+     */
     public function test_guard_has_scope_from_bearer_token_as_string(): void
     {
         $guard = $this->getGuard();

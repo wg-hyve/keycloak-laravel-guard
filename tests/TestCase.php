@@ -7,6 +7,7 @@ namespace KeycloakGuard\Tests;
 use Illuminate\Auth\Middleware\Authenticate;
 use Illuminate\Foundation\Application;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Route;
 use KeycloakGuard\Exceptions\InvalidTokenException;
 use KeycloakGuard\Exceptions\ResourceAccessNotAllowedException;
@@ -41,6 +42,7 @@ abstract class TestCase extends BaseTestCase
         $app['config']->set('keycloak.allowed_resources', 'client-role-test');
         $app['config']->set('keycloak.service_role', 'client-role-test');
         $app['config']->set('keycloak.ignore_resources_validation', true);
+        $app['config']->set('keycloak.ignore_resources_validation', true);
 
         $app['config']->set('auth.defaults.guard', 'api');
         $app['config']->set('auth.providers.users.model', User::class);
@@ -49,6 +51,9 @@ abstract class TestCase extends BaseTestCase
             'driver' => 'keycloak',
             'provider' => 'users'
         ]);
+
+        Http::fake(['keycloak.dev/auth/realms/testing' => Http::response(['public_key' => $this->load('keys/public_no_wrap.key')]),]);
+        Http::fake(['keycloak.dev/auth/realms/nope' => Http::response(['public_key' => null]), 404]);
     }
 
     protected function getPackageProviders($app): array
