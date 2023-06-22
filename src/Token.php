@@ -56,7 +56,7 @@ class Token
         return Cache::remember('keycloak.public_key', config('keycloak.key_cache_seconds'), function () use($keyCloakServer) {
             $response = Http::get($keyCloakServer);
 
-            if (!$response->successful()) {
+            if (!$response->successful() || $response->json('public_key') === null) {
                 throw new TokenException('Can\'t get public key from keycloak server.');
             }
 
