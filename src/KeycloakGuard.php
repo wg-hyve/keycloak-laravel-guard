@@ -42,7 +42,7 @@ class KeycloakGuard implements Guard
     {
         try {
             $this->decodedToken = Token::decode(
-                $this->getTokenForRequest(),
+                $this->getTokenFromRequest(),
                 $this->config['realm_public_key'] ?? '',
                 $this->config['realm_address'] ?? '',
                 $this->config['leeway'] ?? 0,
@@ -61,7 +61,7 @@ class KeycloakGuard implements Guard
      *
      * @return ?string
      */
-    public function getTokenForRequest(): ?string
+    public function getTokenFromRequest(): ?string
     {
         $inputKey = $this->config['input_key'] ?? '';
         $token = $this->request->bearerToken() ?? $this->request->input($inputKey) ?? Arr::get(getallheaders(), 'Authorization');

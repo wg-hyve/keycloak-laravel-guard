@@ -20,7 +20,7 @@ class TokenGuardTest extends TestCase
     {
         $token = $this
             ->getGuard()
-            ->getTokenForRequest();
+            ->getTokenFromRequest();
 
         $this->assertIsString($token);
 
@@ -35,7 +35,7 @@ class TokenGuardTest extends TestCase
     {
         $token = $this
             ->getGuard(null)
-            ->getTokenForRequest();
+            ->getTokenFromRequest();
 
         $this->assertNull($token);
     }
