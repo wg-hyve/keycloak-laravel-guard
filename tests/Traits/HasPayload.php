@@ -8,7 +8,7 @@ trait HasPayload
 {
     protected function load(string $name): string
     {
-        $dir = realpath(sprintf('%s/../data/%s', __DIR__, $name));
+        $dir = realpath(sprintf('%s/../Data/%s', __DIR__, $name));
 
         if($dir) {
 

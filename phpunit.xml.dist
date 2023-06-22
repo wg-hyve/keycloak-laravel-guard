@@ -8,6 +8,7 @@
   </testsuites>
   <php>
     <env name="DB_CONNECTION" value="testing"/>
+    <env name="SYMFONY_DEPRECATIONS_HELPER" value="weak" />
   </php>
   <source>
     <include>

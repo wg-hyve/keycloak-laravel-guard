@@ -1,0 +1,14 @@
+version: "3"
+services:
+
+  keycloak_laravel:
+    tty: true
+    user: "1000:1000"
+    container_name: keycloak_laravel
+    build:
+      context: ./docker
+      dockerfile: Dockerfile
+    image: keycloak-laravel:latest
+    working_dir: /var/www
+    volumes:
+      - ./:/var/www:delegated
