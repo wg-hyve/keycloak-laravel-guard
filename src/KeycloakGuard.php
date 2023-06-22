@@ -59,9 +59,9 @@ class KeycloakGuard implements Guard
     /**
      * Get the token for the current request.
      *
-     * @return string
+     * @return ?string
      */
-    public function getTokenForRequest(): string
+    public function getTokenForRequest(): ?string
     {
         $inputKey = $this->config['input_key'] ?? '';
 

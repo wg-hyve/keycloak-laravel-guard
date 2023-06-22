@@ -14,7 +14,7 @@ class Token
      * Decode a JWT token
      * @throws TokenException
      */
-    public static function decode(string $token = null, string $publicKey = '', string $keyCloakServer = '', int $leeway = 0): ?stdClass
+    public static function decode(?string $token = null, string $publicKey = '', string $keyCloakServer = '', int $leeway = 0): ?stdClass
     {
         JWT::$leeway = $leeway;
 
