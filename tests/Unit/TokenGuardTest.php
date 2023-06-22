@@ -2,6 +2,7 @@
 
 namespace Tests\Unit;
 
+use Illuminate\Support\Arr;
 use KeycloakGuard\Exceptions\InvalidTokenException;
 use KeycloakGuard\Exceptions\ResourceAccessNotAllowedException;
 use KeycloakGuard\Tests\TestCase;
@@ -15,7 +16,7 @@ class TokenGuardTest extends TestCase
      * @throws ResourceAccessNotAllowedException
      * @throws InvalidTokenException
      */
-    public function test_guard_can_load_bearer_token(): void
+    public function test_guard_can_load_bearer_token_from_request(): void
     {
         $token = $this
             ->getGuard()
@@ -30,13 +31,27 @@ class TokenGuardTest extends TestCase
      * @throws ResourceAccessNotAllowedException
      * @throws InvalidTokenException
      */
-    public function test_guard_can_not_load_bearer_token(): void
+    public function test_guard_can_not_load_bearer_token_from_request(): void
     {
         $token = $this
             ->getGuard(null)
             ->getTokenForRequest();
 
         $this->assertNull($token);
+    }
+
+    /**
+     * @throws ResourceAccessNotAllowedException
+     * @throws InvalidTokenException
+     */
+    public function test_guard_can_load_jwt_successfully(): void
+    {
+        $token = $this
+            ->getGuard()
+            ->token();
+
+        $this->assertNotNull($token);
+        $this->assertEquals(json_decode($this->load('jwt_no_expire.json')), $token);
     }
 
     /**
@@ -191,5 +206,85 @@ class TokenGuardTest extends TestCase
         $guard = $this->getGuard();
 
         $this->assertFalse($guard->hasScope(['write-test-nope']));
+    }
+
+    /**
+     * @throws ResourceAccessNotAllowedException
+     * @throws InvalidTokenException
+     */
+    public function test_guard_has_no_user(): void
+    {
+        $guard = $this->getGuard();
+
+        $this->assertFalse($guard->hasUser());
+        $this->assertNull($guard->user());
+    }
+
+    /**
+     * @throws ResourceAccessNotAllowedException
+     * @throws InvalidTokenException
+     */
+    public function test_guard_has_no_guest(): void
+    {
+        $guard = $this->getGuard();
+
+        $this->assertTrue($guard->guest());
+    }
+
+    /**
+     * @throws ResourceAccessNotAllowedException
+     * @throws InvalidTokenException
+     */
+    public function test_guard_token_has_id(): void
+    {
+        $id = $this
+            ->getGuard()
+            ->id();
+
+        $this->assertNotNull($id);
+        $this->assertEquals(Arr::get($this->loadJson('jwt.json'), 'jti'), $id);
+    }
+
+    /**
+     * @throws ResourceAccessNotAllowedException
+     * @throws InvalidTokenException
+     */
+    public function test_guard_can_validate_roles(): void
+    {
+        app('config')->set('keycloak.ignore_resources_validation', false);
+
+        $guard = $this->getGuard();
+
+        $this->assertTrue($guard->validate());
+    }
+
+    /**
+     * @throws ResourceAccessNotAllowedException
+     * @throws InvalidTokenException
+     */
+    public function test_guard_can_not_validate_roles(): void
+    {
+        app('config')->set('keycloak.ignore_resources_validation', false);
+        app('config')->set('keycloak.allowed_resources', 'nope');
+
+        $this->expectException(ResourceAccessNotAllowedException::class);
+        $this->expectExceptionMessage('The decoded JWT token has not a valid `resource_access` allowed by API. Allowed resources by API: nope');
+
+        $guard = $this->getGuard();
+
+        $guard->validate();
+    }
+
+    /**
+     * @throws ResourceAccessNotAllowedException
+     * @throws InvalidTokenException
+     */
+    public function test_guard_ignores_validation(): void
+    {
+        app('config')->set('keycloak.allowed_resources', 'nope');
+
+        $guard = $this->getGuard();
+
+        $this->assertTrue($guard->validate());
     }
 }

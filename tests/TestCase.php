@@ -69,7 +69,6 @@ abstract class TestCase extends BaseTestCase
             $req->headers->set('Authorization', sprintf('Bearer %s', $this->load(sprintf('tokens/%s', $tokenName))));
         }
 
-
         return new KeycloakGuard(new User(), $req);
     }
 }
