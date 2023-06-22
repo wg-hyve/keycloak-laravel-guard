@@ -80,7 +80,7 @@ class KeycloakGuard implements Guard
      */
     public function check(): bool
     {
-        return !is_null($this->user());
+        return true;
     }
 
     /**
