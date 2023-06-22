@@ -61,10 +61,14 @@ abstract class TestCase extends BaseTestCase
      * @throws ResourceAccessNotAllowedException
      * @throws InvalidTokenException
      */
-    protected function getGuard(): KeycloakGuard
+    protected function getGuard(?string $tokenName = 'access_token'): KeycloakGuard
     {
         $req = new Request();
-        $req->headers->set('Authorization', sprintf('Bearer %s', $this->load('tokens/access_token')));
+
+        if($tokenName) {
+            $req->headers->set('Authorization', sprintf('Bearer %s', $this->load(sprintf('tokens/%s', $tokenName))));
+        }
+
 
         return new KeycloakGuard(new User(), $req);
     }

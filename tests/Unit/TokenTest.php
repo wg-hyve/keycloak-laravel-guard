@@ -15,6 +15,16 @@ class TokenTest extends TestCase
     /**
      * @throws TokenException
      */
+    public function test_empty_token_returns_null(): void
+    {
+        $token = Token::decode(null, $this->load('keys/public.key'));
+
+        $this->assertNull($token);
+    }
+
+    /**
+     * @throws TokenException
+     */
     public function test_token_can_be_loaded_from_public_key(): void
     {
         $token = Token::decode($this->load('tokens/access_token'), $this->load('keys/public.key'));
