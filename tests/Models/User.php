@@ -2,9 +2,10 @@
 
 namespace KeycloakGuard\Tests\Models;
 
+use Illuminate\Contracts\Auth\UserProvider;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
-class User extends Authenticatable implements \Illuminate\Contracts\Auth\UserProvider
+class User extends Authenticatable implements UserProvider
 {
     public function retrieveById($identifier)
     {
