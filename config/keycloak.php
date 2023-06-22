@@ -26,4 +26,6 @@ return [
     'scope' => env('KEYCLOAK_SCOPE', null),
 
     'grant_type' => env('KEYCLOAK_GRANT_TYPE', null),
+
+    'leeway' => env('KEYCLOAK_LEEWAY', 0),
 ];
