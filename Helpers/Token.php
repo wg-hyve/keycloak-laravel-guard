@@ -30,8 +30,6 @@ class Token
     {
         $payload = $this->loadJson($this->source);
 
-        var_dump($this->hasExpire);
-
         if($this->hasExpire === false) {
             unset($payload['exp']);
         }
