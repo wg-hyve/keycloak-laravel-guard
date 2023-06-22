@@ -64,8 +64,13 @@ class KeycloakGuard implements Guard
     public function getTokenForRequest(): ?string
     {
         $inputKey = $this->config['input_key'] ?? '';
+        $token = $this->request->bearerToken() ?? $this->request->input($inputKey) ?? Arr::get(getallheaders(), 'Authorization');
 
-        return $this->request->bearerToken() ?? $this->request->input($inputKey) ?? Arr::get(getallheaders(), 'Authorization');
+        if($token) {
+            return str_replace('Bearer ', '', $token);
+        }
+
+        return null;
     }
 
     /**
