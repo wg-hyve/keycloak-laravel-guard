@@ -228,7 +228,18 @@ class TokenGuardTest extends TestCase
     {
         $guard = $this->getGuard();
 
-        $this->assertTrue($guard->guest());
+        $this->assertFalse($guard->guest());
+    }
+
+    /**
+     * @throws ResourceAccessNotAllowedException
+     * @throws InvalidTokenException
+     */
+    public function test_guard_check_is_valid(): void
+    {
+        $guard = $this->getGuard();
+
+        $this->assertTrue($guard->check());
     }
 
     /**
@@ -286,5 +297,17 @@ class TokenGuardTest extends TestCase
         $guard = $this->getGuard();
 
         $this->assertTrue($guard->validate());
+    }
+
+    /**
+     * @throws ResourceAccessNotAllowedException
+     * @throws InvalidTokenException
+     */
+    public function test_token_is_expired(): void
+    {
+        $this->expectException(InvalidTokenException::Class);
+        $this->expectExceptionMessage('Expired token');
+
+        $this->getGuard('access_token_has_expire');
     }
 }
