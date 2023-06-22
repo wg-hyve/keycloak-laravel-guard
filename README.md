@@ -70,6 +70,43 @@ Delivers all roles from your client. Client is delivered in azp claim.
 #### roles(bool $useGlobal = true): array
 Delivers all roles (global & client)
 
+## Environment Variables
+```
+KEYCLOAK_REALM_PUBLIC_KEY
+```
+Local Public key of your Keycloak instance. You can find it in `https://your-keycloak.dev.com/auth/realms/your_realm/`
+
+```
+KEYCLOAK_TOKEN_PRINCIPAL_ATTRIBUTE
+```
+Should be `azp` or `client_id` depending on your Keycloak configuration
+
+```
+KEYCLOAK_IGNORE_RESOURCE_VALIDATION
+```
+true or false, auto check if role given with ```KEYCLOAK_ALLOWED_RESOURCES``` is in your token
+
+```
+KEYCLOAK_ALLOWED_RESOURCES
+```
+role to auto check
+
+```
+KEYCLOAK_REALM_ADDRESS
+```
+URL to load public key. Usually `https://your-keycloak.dev.com/auth/realms/your_realm/`
+
+```
+KEYCLOAK_KEY_CACHE_SECONDS
+```
+
+Cache duration for downloaded public key of your realm.
+
+```
+KEYCLOAK_LEEWAY
+```
+You want to set the time offset in seconds if you get `Cannot handle token prior to (time) error`. Use this if your app and Keycloak timings differ. 
+
 
 ## Testing
 
