@@ -30,7 +30,8 @@
         }
     },
     "scripts": {
-        "test": "vendor/bin/phpunit",
+        "jwt:generate": "php ./Helpers/Token.php",
+        "test": "vendor/bin/phpunit --testdox",
         "test-coverage": "phpunit --coverage-html coverage"
     },
     "extra": {

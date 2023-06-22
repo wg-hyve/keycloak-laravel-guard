@@ -6,6 +6,11 @@
   "sub": "21b125fe-59f4-492a-b50d-4df74a5c9f72",
   "typ": "Bearer",
   "azp": "client-test",
+  "realm_access": {
+    "roles": [
+      "client-role-realm-test"
+    ]
+  },
   "resource_access": {
     "client-test": {
       "roles": [
