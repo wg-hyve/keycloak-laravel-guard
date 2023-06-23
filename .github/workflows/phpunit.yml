@@ -1,0 +1,40 @@
+name: PHP Unittest
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@latest
+
+    - name: Validate composer.json and composer.lock
+      run: composer validate --strict
+      
+    - uses: php-actions/composer@latest
+
+    - name: PHPUnit Tests
+      uses: php-actions/phpunit@latest
+      with:
+        php_extensions: xdebug
+        bootstrap: vendor/autoload.php
+        configuration: test/phpunit.xml
+        args: --coverage-text
+      env:
+        XDEBUG_MODE: coverage
+        TEST_NAME: Scarlett
+
+    # Add a test script to composer.json, for instance: "test": "vendor/bin/phpunit"
+    # Docs: https://getcomposer.org/doc/articles/scripts.md
+
+    # - name: Run test suite
+    #   run: composer run-script test
