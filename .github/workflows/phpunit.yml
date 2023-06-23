@@ -16,14 +16,12 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
-
+    - uses: php-actions/composer@v6
     - name: Validate composer.json and composer.lock
-      run: composer validate --strict
-      
-    - uses: php-actions/composer@latest
+      run: composer validate --strict && composer install
 
     - name: PHPUnit Tests
-      uses: php-actions/phpunit@v10
+    - uses: php-actions/phpunit@v3
       with:
         php_extensions: xdebug
         bootstrap: vendor/autoload.php
