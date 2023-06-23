@@ -15,21 +15,23 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v3
-    - uses: php-actions/composer@v6
-    - name: Validate composer.json and composer.lock
-      run: composer validate --strict && composer install
+      - uses: actions/checkout@v3
+     
+      - name: Install dependencies
+      - uses: php-actions/composer@v6
+      - name: Validate composer.json and composer.lock
+        run: composer validate --strict && composer install
 
-    - name: PHPUnit Tests
-    - uses: php-actions/phpunit@v3
-      with:
-        php_extensions: xdebug
-        bootstrap: vendor/autoload.php
-        configuration: test/phpunit.xml
-        args: --coverage-text
-      env:
-        XDEBUG_MODE: coverage
-        TEST_NAME: Scarlett
+      - name: PHPUnit Tests
+      - uses: php-actions/phpunit@v3
+        with:
+          php_extensions: xdebug
+          bootstrap: vendor/autoload.php
+          configuration: test/phpunit.xml
+          args: --coverage-text
+        env:
+          XDEBUG_MODE: coverage
+          TEST_NAME: Scarlett
 
     # Add a test script to composer.json, for instance: "test": "vendor/bin/phpunit"
     # Docs: https://getcomposer.org/doc/articles/scripts.md
