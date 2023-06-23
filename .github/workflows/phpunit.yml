@@ -15,7 +15,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@latest
+    - uses: actions/checkout@v3
 
     - name: Validate composer.json and composer.lock
       run: composer validate --strict
@@ -23,7 +23,7 @@ jobs:
     - uses: php-actions/composer@latest
 
     - name: PHPUnit Tests
-      uses: php-actions/phpunit@latest
+      uses: php-actions/phpunit@v10
       with:
         php_extensions: xdebug
         bootstrap: vendor/autoload.php
