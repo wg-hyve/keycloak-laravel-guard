@@ -16,7 +16,7 @@ class KeycloakGuard implements Guard
 {
     private array $config;
     private UserProvider $provider;
-    private ?stdClass $decodedToken;
+    private ?stdClass $decodedToken = null;
     private Request $request;
 
     /**
@@ -27,7 +27,6 @@ class KeycloakGuard implements Guard
     {
         $this->config = config('keycloak');
         $this->provider = $provider;
-        $this->decodedToken = null;
         $this->request = $request;
 
         $this->authenticate();
@@ -139,7 +138,7 @@ class KeycloakGuard implements Guard
     {
         $this->validateResources();
 
-        return true;
+        return $this->decodedToken !== null;
     }
 
     /**
@@ -219,9 +218,9 @@ class KeycloakGuard implements Guard
     public function hasScope(string|array $scope): bool
     {
         return count(array_intersect(
-            $this->scopes(),
-            is_string($scope) ? [$scope] : $scope
-        )) > 0;
+                         $this->scopes(),
+                         is_string($scope) ? [$scope] : $scope
+                     )) > 0;
     }
 
     public function getRoles(): array
