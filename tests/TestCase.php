@@ -42,7 +42,6 @@ abstract class TestCase extends BaseTestCase
         $app['config']->set('keycloak.allowed_resources', 'client-role-test');
         $app['config']->set('keycloak.service_role', 'client-role-test');
         $app['config']->set('keycloak.ignore_resources_validation', true);
-        $app['config']->set('keycloak.ignore_resources_validation', true);
 
         $app['config']->set('auth.defaults.guard', 'api');
         $app['config']->set('auth.providers.users.model', User::class);
