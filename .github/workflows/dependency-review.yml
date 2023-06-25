@@ -26,3 +26,6 @@ jobs:
         uses: actions/dependency-review-action@v3
         with:
           fail-on-severity: moderate
+          allow-licenses: MIT, Apache-2.0, ISC, BSD-2-Clause, 0BSD, NOASSERTION
+          base-ref: ${{ github.event.pull_request.base.sha || 'main' }}
+          head-ref: ${{ github.event.pull_request.head.sha || github.ref }
