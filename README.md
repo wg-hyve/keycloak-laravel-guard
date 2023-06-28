@@ -70,6 +70,39 @@ Delivers all roles from your client. Client is delivered in azp claim.
 #### roles(bool $useGlobal = true): array
 Delivers all roles (global & client)
 
+## User
+Saving users in a local database is disabled per default. Execute following steps to enable it.
+Make sure you read the instructions for the environment variables in your `.env`.
+
+### Configuration
+Enable `KEYCLOAK_PROVIDE_LOCAL_USER` in your environment.
+```
+KEYCLOAK_PROVIDE_LOCAL_USER = true
+```
+The guard will save user objects from JWTs.
+
+### Migrations
+Publish und execute migrations.
+```bash
+php artisan vendor:publish --tag=keycloak-migrations
+```
+Make adjustments and migrate.
+```bash
+php artisan migrate
+```
+
+### User Model
+Update your user model in `config/auth.php`. You can also extend it and add your own user model.
+```php
+'providers' => [
+    'users' => [
+        'driver' => 'eloquent',
+        'model' => \KeycloakGuard\Models\User::class,
+    ],
+],
+```
+You are free to use your user model to extend and define custom relations. Make sure it is compatible with the migration above.
+
 ## Environment Variables
 ```
 KEYCLOAK_REALM_PUBLIC_KEY
@@ -106,6 +139,36 @@ Cache duration for downloaded public key of your realm.
 KEYCLOAK_LEEWAY
 ```
 You want to set the time offset in seconds if you get `Cannot handle token prior to (time) error`. Use this if your app and Keycloak timings differ. 
+
+```
+KEYCLOAK_PROVIDE_LOCAL_USER
+```
+
+Enable local user processing. The guard will try to store the user in a local database. Default is false.
+
+```
+KEYCLOAK_USER_ID_CLAIM
+```
+
+The user UUID in your JWT. Default is sub claim.
+
+```
+KEYCLOAK_USER_MAIL_CLAIM
+```
+
+The email claim in your JWT. Default is email.
+
+```
+KEYCLOAK_USER_FIRSTNAME_CLAIM
+```
+
+The firstname claim in your JWT. Default is given_name.
+
+```
+KEYCLOAK_USER_LASTNAME_CLAIM
+```
+
+The lastname claim in your JWT. Default is family_name.
 
 
 ## Testing

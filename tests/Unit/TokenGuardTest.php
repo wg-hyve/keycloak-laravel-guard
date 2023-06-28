@@ -5,6 +5,7 @@ namespace Tests\Unit;
 use Illuminate\Support\Arr;
 use KeycloakGuard\Exceptions\InvalidTokenException;
 use KeycloakGuard\Exceptions\ResourceAccessNotAllowedException;
+use KeycloakGuard\Models\User;
 use KeycloakGuard\Tests\TestCase;
 use KeycloakGuard\Tests\Traits\HasPayload;
 
@@ -257,14 +258,13 @@ class TokenGuardTest extends TestCase
      * @throws ResourceAccessNotAllowedException
      * @throws InvalidTokenException
      */
-    public function test_guard_token_has_id(): void
+    public function test_guard_token_has_no_id(): void
     {
         $id = $this
             ->getGuard()
             ->id();
 
-        $this->assertNotNull($id);
-        $this->assertEquals(Arr::get($this->loadJson('jwt.json'), 'jti'), $id);
+        $this->assertNull($id);
     }
 
     /**
@@ -320,5 +320,38 @@ class TokenGuardTest extends TestCase
         $this->expectExceptionMessage('Expired token');
 
         $this->getGuard('access_token_has_expire');
+    }
+
+    /**
+     * @throws ResourceAccessNotAllowedException
+     * @throws InvalidTokenException
+     */
+    public function test_guard_ignores_user_claims(): void
+    {
+        $this->assertNull($this->getGuard('access_token_with_user')->user());
+    }
+
+    /**
+     * @throws ResourceAccessNotAllowedException
+     * @throws InvalidTokenException
+     */
+    public function test_load_user_from_token(): void
+    {
+        app('config')->set('keycloak.provide_user', true);
+
+        $user = $this->getGuard('access_token_with_user')->user();
+        $jwt = $this->loadJson('jwt_with_user.json');
+
+        $this->assertNotNull($jwt['sub']);
+        $this->assertNotNull($jwt['email']);
+        $this->assertNotNull($jwt['given_name']);
+        $this->assertNotNull($jwt['family_name']);
+
+        $this->assertInstanceOf(User::class, $user);
+        $this->assertEquals(1, $user->id);
+        $this->assertEquals($jwt['sub'], $user->uuid);
+        $this->assertEquals($jwt['email'], $user->email);
+        $this->assertEquals($jwt['given_name'], $user->firstname);
+        $this->assertEquals($jwt['family_name'], $user->lastname);
     }
 }

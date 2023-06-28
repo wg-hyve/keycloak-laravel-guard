@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use KeycloakGuard\Exceptions\InvalidTokenException;
 use KeycloakGuard\Exceptions\ResourceAccessNotAllowedException;
+use KeycloakGuard\Models\User;
 use stdClass;
 
 class KeycloakGuard implements Guard
@@ -17,6 +18,7 @@ class KeycloakGuard implements Guard
     private array $config;
     private UserProvider $provider;
     private ?stdClass $decodedToken = null;
+    private ?Authenticatable $user = null;
     private Request $request;
 
     /**
@@ -52,6 +54,8 @@ class KeycloakGuard implements Guard
 
         if ($this->decodedToken) {
             $this->validate();
+
+            $this->upsertUser();
         }
     }
 
@@ -111,15 +115,15 @@ class KeycloakGuard implements Guard
      */
     public function user(): ?Authenticatable
     {
-        return null;
+        return $this->user;
     }
 
     /**
      * Get the ID for the currently authenticated user.
      */
-    public function id(): ?string
+    public function id(): ?int
     {
-        return $this?->decodedToken?->jti;
+        return $this->user?->id;
     }
 
     /**
@@ -226,6 +230,26 @@ class KeycloakGuard implements Guard
     public function getRoles(): array
     {
         return $this->roles(false);
+    }
+
+    private function upsertUser(): void
+    {
+
+        if($this->config['provide_user'] === false) {
+            return;
+        }
+
+        $userId = $this->decodedToken?->{$this->config['user_id_claim']};
+
+        $this->user = User::updateOrCreate(
+            ['uuid' => $userId],
+            [
+                'uuid' => $userId,
+                'email' => $this->decodedToken?->{$this->config['user_mail_claim']},
+                'firstname' => $this->decodedToken?->{$this->config['user_firstname_claim']},
+                'lastname' => $this->decodedToken?->{$this->config['user_lastname_claim']},
+            ]
+        );
     }
 
     private function getClientName(): string|null
