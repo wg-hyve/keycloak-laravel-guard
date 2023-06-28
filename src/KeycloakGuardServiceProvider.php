@@ -24,7 +24,7 @@ class KeycloakGuardServiceProvider extends ServiceProvider
 
     protected function registerMigrations()
     {
-        if ($this->app->runningInConsole()) {
+        if ($this->app->runningInConsole() && Keycloak::$ignoreMigration === false) {
             $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
         }
     }
