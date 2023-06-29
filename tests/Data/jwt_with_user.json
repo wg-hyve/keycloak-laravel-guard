@@ -1,0 +1,20 @@
+{
+  "iat": 1687356950,
+  "jti": "8f89c889-8d52-4a63-8247-b8683d55c44b",
+  "iss": "https://example.com",
+  "sub": "21b125fe-59f4-492a-b50d-4df74a5c9f72",
+  "typ": "Bearer",
+  "azp": "client-test",
+  "resource_access": {
+    "client-test": {
+      "roles": [
+        "client-role-test"
+      ]
+    }
+  },
+  "scope": "email profile",
+  "email_verified": true,
+  "given_name": "John",
+  "family_name": "Doe",
+  "email": "test@example.com"
+}
