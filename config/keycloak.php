@@ -24,4 +24,6 @@ return [
     'user_firstname_claim' => env('KEYCLOAK_USER_FIRSTNAME_CLAIM', 'given_name'),
 
     'user_lastname_claim' => env('KEYCLOAK_USER_LASTNAME_CLAIM', 'family_name'),
+  
+    'debug' => env('KEYCLOAK_DEBUG', false),
 ];
