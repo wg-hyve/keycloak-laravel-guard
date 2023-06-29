@@ -4,17 +4,17 @@ declare(strict_types=1);
 
 namespace KeycloakGuard\Tests;
 
-use Illuminate\Auth\Middleware\Authenticate;
 use Illuminate\Foundation\Application;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Route;
 use KeycloakGuard\Exceptions\InvalidTokenException;
 use KeycloakGuard\Exceptions\ResourceAccessNotAllowedException;
 use KeycloakGuard\KeycloakGuard;
 use KeycloakGuard\KeycloakGuardServiceProvider;
+use KeycloakGuard\Models\User;
 use KeycloakGuard\Tests\Controllers\AcmeController;
-use KeycloakGuard\Tests\Models\User;
 use KeycloakGuard\Tests\Traits\HasPayload;
 use Orchestra\Testbench\TestCase as BaseTestCase;
 
@@ -27,6 +27,8 @@ abstract class TestCase extends BaseTestCase
         parent::setUp();
 
         $this->app->setBasePath(__DIR__);
+
+        $this->setUpDatabase();
     }
 
     /**
@@ -55,6 +57,12 @@ abstract class TestCase extends BaseTestCase
         Http::fake(['keycloak.dev/auth/realms/nope' => Http::response(['public_key' => null]), 404]);
     }
 
+    protected function setUpDatabase(): void
+    {
+        $userMigration = require __DIR__.'/../database/migrations/2023_06_28_000000_create_users_table.php';
+        $userMigration->up();
+    }
+
     protected function getPackageProviders($app): array
     {
         Route::any('/acme/foo', [AcmeController::class, 'foo'])->middleware(['auth:cloak']);
@@ -77,6 +85,13 @@ abstract class TestCase extends BaseTestCase
         return $this;
     }
 
+    protected function withUserToken(): static
+    {
+        $this->withToken($this->load('tokens/access_token_with_user'));
+
+        return $this;
+    }
+
     /**
      * @throws ResourceAccessNotAllowedException
      * @throws InvalidTokenException
@@ -89,6 +104,6 @@ abstract class TestCase extends BaseTestCase
             $req->headers->set('Authorization', sprintf('Bearer %s', $this->load(sprintf('tokens/%s', $tokenName))));
         }
 
-        return new KeycloakGuard(new User(), $req);
+        return new KeycloakGuard(Auth::createUserProvider('users'), $req);
     }
 }

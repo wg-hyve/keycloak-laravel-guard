@@ -7,7 +7,6 @@ namespace Helpers;
 require_once './vendor/autoload.php';
 
 use Firebase\JWT\JWT;
-use Firebase\JWT\Key;
 use KeycloakGuard\Tests\Traits\HasPayload;
 
 class Token

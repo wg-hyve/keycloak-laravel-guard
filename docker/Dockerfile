@@ -31,6 +31,7 @@ RUN apk add --no-cache \
   php82-pdo \
   php82-pdo_mysql \
   php82-pdo_pgsql \
+  php82-pdo_sqlite \
   php82-sodium \
   php82-session \
   php82-tokenizer \
