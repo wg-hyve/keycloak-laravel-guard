@@ -14,4 +14,6 @@ return [
     'key_cache_seconds' => env('KEYCLOAK_KEY_CACHE_SECONDS', 86400),
 
     'leeway' => env('KEYCLOAK_LEEWAY', 0),
+
+    'debug' => env('KEYCLOAK_DEBUG', false),
 ];

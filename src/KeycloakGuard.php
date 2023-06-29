@@ -159,13 +159,19 @@ class KeycloakGuard implements Guard
 
         $allowed_resources = explode(',', $this->config['allowed_resources']);
 
-        if (count(array_intersect($token_resource_access, $allowed_resources)) == 0) {
+        if (count(array_intersect($this->roles(), $allowed_resources)) == 0) {
 
-            throw new ResourceAccessNotAllowedException(
-                sprintf(
+            $output = 'The decoded JWT token has not a valid `resource_access` allowed by API.';
+            
+            if(isset($this->config['debug'])) {
+                $output = sprintf(
                     'The decoded JWT token has not a valid `resource_access` allowed by API. Allowed resources by API: %s',
                     $this->config['allowed_resources']
-                )
+                );
+            }
+
+            throw new ResourceAccessNotAllowedException(
+                $output
             );
         }
     }
