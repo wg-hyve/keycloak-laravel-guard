@@ -103,6 +103,25 @@ Update your user model in `config/auth.php`. You can also extend it and add your
 ```
 You are free to use your user model to extend and define custom relations. Make sure it is compatible with the migration above.
 
+### Usage
+Receive the User instance with `user()`
+```php
+
+namespace App\Your\Service
+
+use Illuminate\Support\Facades\Auth;
+use KeycloakGuard\Models\User;
+
+class AcmeService
+{
+    public static function getUser(): ?User
+    {
+        return Auth::user();
+    }
+}
+```
+
+
 ## Environment Variables
 ```
 KEYCLOAK_REALM_PUBLIC_KEY
