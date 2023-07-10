@@ -13,15 +13,17 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('users', function (Blueprint $table) {
-            $table->id();
-            $table->string('uuid')->index();
-            $table->string('name')->nullable();
-            $table->string('firstname')->nullable();
-            $table->string('lastname')->nullable();
-            $table->string('email')->unique();
-            $table->timestamps();
-        });
+        if (!Schema::hasTable('users')) {
+            Schema::create('users', function (Blueprint $table) {
+                $table->id();
+                $table->string('uuid')->index();
+                $table->string('name')->nullable();
+                $table->string('firstname')->nullable();
+                $table->string('lastname')->nullable();
+                $table->string('email')->unique();
+                $table->timestamps();
+            });
+        }
     }
 
     /**
