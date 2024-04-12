@@ -15,7 +15,7 @@
     "minimum-stability": "stable",
     "prefer-stable": true,
     "require": {
-        "php": "^8.1",
+        "php": "^8.2",
         "laravel/framework": "^10.10|^11.0",
         "firebase/php-jwt": "^6.10",
         "sinema/json-api-error-laravel": "^0.3.0"
