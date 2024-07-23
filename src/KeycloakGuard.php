@@ -246,8 +246,8 @@ class KeycloakGuard implements Guard
             [
                 'uuid' => $userId,
                 'email' => $this->decodedToken?->{$this->config['user_mail_claim']},
-                'firstname' => $this->decodedToken?->{$this->config['user_firstname_claim']},
-                'lastname' => $this->decodedToken?->{$this->config['user_lastname_claim']},
+                'firstname' => $this->decodedToken?->{$this->config['user_firstname_claim']} ?? null,
+                'lastname' => $this->decodedToken?->{$this->config['user_lastname_claim']} ?? null,
             ]
         );
     }
